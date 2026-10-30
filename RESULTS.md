@@ -94,3 +94,36 @@
   - Exit code: 99
 
 - Explanation: The original requirement passed. After changing the P95 limit to 300 ms, K6 detected that the response time exceeded the threshold and returned exit code 99.
+
+### Step 0.8: Bug Hunt
+
+- Initial test:
+  - Virtual users: 5
+  - Duration: 20 seconds
+  - Total requests: 75
+  - Checks succeeded: 85.77% (193/225)
+  - Checks failed: 14.22% (32/225)
+  - The `no pepperoni` check failed 7 times.
+  - The `no knife needed` check failed 25 times.
+
+- Investigation:
+  - Used `explore.js` to inspect the available toppings and tools from the API.
+  - The API returned the ingredient name as `Pepperoni` and the tool name as `Knife`.
+  - The original request used lowercase values: `pepperoni` and `knife`.
+
+- Fix:
+  - Changed `pepperoni` to `Pepperoni`.
+  - Changed `knife` to `Knife`.
+
+- Final test:
+  - Virtual users: 5
+  - Duration: 20 seconds
+  - Total requests: 75
+  - Checks succeeded: 100% (225/225)
+  - Checks failed: 0%
+  - HTTP request failed: 0%
+  - Result: All checks passed.
+
+- Explanation:
+  - The request used lowercase names that did not match the names returned by the API.
+  - Load testing sent many requests, making it easier to detect inconsistent results that might not appear in a single manual request. After correcting the names, all checks passed.
