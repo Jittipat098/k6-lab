@@ -69,3 +69,28 @@
   - Exit code: 99
 
 - Explanation: The normal run passed all thresholds. In the strict run, the p(95) response time exceeded the 300 ms limit, so the http_req_duration threshold failed and K6 returned exit code 99.
+
+
+### Step 0.7: From a requirement to thresholds
+
+- Normal run:
+  - Virtual users: 3
+  - Duration: 30 seconds
+  - P95 threshold: less than 1000 ms
+  - Actual p(95): 384.13 ms
+  - P99 threshold: less than 1500 ms
+  - Actual p(99): 716.83 ms
+  - HTTP request failed: 0.00%
+  - Checks succeeded: 100%
+  - Result: All thresholds passed.
+
+- Modified requirement run:
+  - P95 threshold changed from 1000 ms to 300 ms.
+  - Actual p(95): 398.63 ms
+  - Actual p(99): 737.30 ms
+  - HTTP request failed: 0.00%
+  - Checks succeeded: 100%
+  - Result: The p(95) threshold failed because 398.63 ms exceeded 300 ms.
+  - Exit code: 99
+
+- Explanation: The original requirement passed. After changing the P95 limit to 300 ms, K6 detected that the response time exceeded the threshold and returned exit code 99.
