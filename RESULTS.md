@@ -49,3 +49,23 @@
   - Checks Failed: 0
   - Failed Requests: 0%
   - Result: The API correctly rejected the request without an authorization token.
+
+### Step 0.6: Thresholds
+
+- Normal run (`k6 run 06-thresholds.js`):
+  - P95 threshold: 1500 ms
+  - Actual p(95): 378.78 ms
+  - Checks succeeded: 100% (132/132)
+  - HTTP request failed: 0.00%
+  - Threshold result: All passed
+  - Exit code: 0
+
+- Strict run (`k6 run -e P95=300 06-thresholds.js`):
+  - P95 threshold: 300 ms
+  - Actual p(95): 669.21 ms
+  - Checks succeeded: 100% (130/130)
+  - HTTP request failed: 0.00%
+  - Threshold result: http_req_duration failed
+  - Exit code: 99
+
+- Explanation: The normal run passed all thresholds. In the strict run, the p(95) response time exceeded the 300 ms limit, so the http_req_duration threshold failed and K6 returned exit code 99.
